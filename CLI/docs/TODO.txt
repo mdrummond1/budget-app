@@ -1,0 +1,69 @@
+BaseTable:
+    Insert()
+    Select()
+    Update()
+    Delete()
+
+Budgets:
+    Insert()
+    Select()
+
+Categories:
+    Insert()
+    Update()
+    Select()
+
+Category_Types:
+    Select()
+
+Transaction_Types:
+    Select()
+
+Transactions:
+    Insert()
+    Update()
+    Select()
+    Delete()
+
+Vendor_Types:
+    Insert()
+    Update()
+    Select()
+
+Vendors:
+    Insert()
+    Update()
+    Select()
+
+Queries:
+    BaseQuery:
+        GetAll()
+
+    Budgets:
+        GetBudgetForMonth()
+        GetBudgetForYear()
+    
+    Categories:
+        GetCategoriesForBudget()
+        GetCategoriesForBudgetAmount()
+        GetCategoriesForActualAmount()
+        GetCategoriesForIncome()
+        GetCategoriesForFixed()
+        GetCategoriesForVariable()
+
+    Transactions:
+        GetTransactionsForMonth()
+        GetTransactionsForYear()
+        GetTransactionsForDay()
+        GetTransactionsFromVendor()
+    
+    Vendors:
+        GetVendorsForType()
+        GetVendorByName()
+
+    Vendor_Types:
+        //only on load and update
+    Category_Types:
+        //only GetAll()
+    Vendor_Types:
+        //only GetAll()

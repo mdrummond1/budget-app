@@ -1,0 +1,59 @@
+budgets:
+    create
+    select
+
+categories:
+    create
+    update
+    select
+
+category_types:
+    select
+
+transaction_types:
+    select
+
+transactions:
+    create
+    update:
+        by vendor   
+        by date
+        by id
+    select
+    delete
+
+vendor_types:
+    create
+    update 
+    select
+
+vendors:
+    create  
+    update
+    select
+
+queries:
+    get all rows of table
+
+    budgets:
+        for a month
+        for a year
+
+    categories:
+        for a budgets
+        for a budgeted_amount
+        for an actual_amount
+        for each category_type
+
+    transactions:
+        for given month
+        for given year
+        for given day
+        for a vendor
+
+    vendors:
+        for each vendor_type
+        by name
+    
+flow:
+    load vendor_types into Vendor_Types dict [<type>, <row>]
