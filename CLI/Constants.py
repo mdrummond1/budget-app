@@ -1,8 +1,8 @@
 Connection = {
-#    'dbname': 'budgeting',
-#    'host': '192.168.1.107',
-#    'user': 'app',
-#    'pword': 'pass123'
+   'dbname': 'budgeting',
+   'host': '192.168.1.107',
+   'user': 'app',
+   'pword': 'pass123'
 }
 
 TableNames = {
@@ -34,4 +34,6 @@ Queries = {
     'Insert': 'INSERT',
     'Delete': 'DELETE',
 }
+
+
 
