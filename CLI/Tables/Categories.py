@@ -1,4 +1,5 @@
 from misc_functions import format_menu
+from Database import *
 
 class Category:
     def __init__(self, row) -> None:
@@ -8,29 +9,30 @@ class Category:
 
 
 
-def show_categories_menu():
-    print(format_menu("CATEGORIES"))
-    print('1. View All Categories')
-    print('2. View Selected Categorie')
-    print('3. Add New Category')
-    print('4. Modify Category')
-    print('5. Delete Category')
-    print('6. Main Menu')
+def show_categories_menu(db: Database):
 
     sel = 0
     while sel != 6:
+        print(format_menu("CATEGORIES"))
+        print('1. View All Categories')
+        print('2. View Selected Categorie')
+        print('3. Add New Category')
+        print('4. Modify Category')
+        print('5. Delete Category')
+        print('6. Main Menu')
+
         sel = int(input("Enter Selection:"))
             
         if sel == 1:
-            view_all_categories()
+            view_all_categories(db)
         elif sel == 2:
-            view_selected_category()
+            view_selected_category(db)
         elif sel == 3:
-            add_new_category()
+            add_new_category(db)
         elif sel == 4:
-            modify_category()
+            modify_category(db)
         elif sel == 5:
-            delete_category()
+            delete_category(db)
         elif sel == 6:
             break
         else:
@@ -38,17 +40,17 @@ def show_categories_menu():
 
         sel = 0 
 
-def view_all_categories():
+def view_all_categories(db: Database):
     print("showing all categories")
 
-def view_selected_category():
+def view_selected_category(db: Database):
     print(f"showing category with id: ")
 
-def add_new_category():
+def add_new_category(db: Database):
     print(f"adding new category:")
 
-def modify_category():
+def modify_category(db: Database):
     print(f"changing category with id")
 
-def delete_category():
+def delete_category(db: Database):
     print(f"deleting category with id")

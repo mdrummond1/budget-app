@@ -57,11 +57,11 @@ sel = 0
 while sel != 4:
     sel = show_main_menu()
     if sel == 1:
-        show_budgets_menu()
+        show_budgets_menu(d)
     elif sel == 2:
-        show_categories_menu()
+        show_categories_menu(d)
     elif sel == 3:
-        show_transactions_menu()
+        show_transactions_menu(d)
     elif sel == 4:
         break
     else:
