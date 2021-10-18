@@ -10,6 +10,33 @@ class Category:
 
 def show_categories_menu():
     print(format_menu("CATEGORIES"))
+    print('1. View All Categories')
+    print('2. View Selected Categorie')
+    print('3. Add New Category')
+    print('4. Modify Category')
+    print('5. Delete Category')
+    print('6. Main Menu')
+
+    sel = 0
+    while sel != 6:
+        sel = int(input("Enter Selection:"))
+            
+        if sel == 1:
+            view_all_categories()
+        elif sel == 2:
+            view_selected_category()
+        elif sel == 3:
+            add_new_category()
+        elif sel == 4:
+            modify_category()
+        elif sel == 5:
+            delete_category()
+        elif sel == 6:
+            break
+        else:
+            print("Invalid Option!")
+
+        sel = 0 
 
 def view_all_categories():
     print("showing all categories")

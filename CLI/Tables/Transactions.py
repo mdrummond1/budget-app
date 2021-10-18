@@ -11,9 +11,39 @@ class Transaction:
 
 def show_transactions_menu():
     print(format_menu("TRANSACTIONS"))
+    print('1. View All Transactions')
+    print('2. View Selected Transaction')
+    print('3. Add New Transaction')
+    print('4. Modify Transaction')
+    print('5. Delete Transaction')
+    print('6. Main Menu')
+
+    sel = 0
+
+    while sel != 6:
+        sel = int(input("Enter Selection: "))
+        if sel == 1:
+            view_all_transactions()
+        elif sel == 2:
+            view_selected_transaction()
+        elif sel == 3:
+            add_new_transaction()
+        elif sel == 4:
+            modify_transaction()
+        elif sel == 5:
+            delete_transaction()
+        elif sel == 6:
+            break
+        else:
+            print("Invalid Option")
+        
+        sel = 0
 
 def view_all_transactions():
     print(f"viewing all transactions")
+
+def view_selected_transaction():
+    print(f"viewing selected transaction")
 
 def add_new_transaction():
     print(f"adding new transaction")

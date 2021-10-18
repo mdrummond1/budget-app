@@ -32,9 +32,9 @@ def show_budgets_menu():
     print("4. Modify budget")
     print("5. return to main menu")
     
-    sel = int(input('Enter Selection: '))
-
+    sel = 0
     while sel != 5:
+        sel = int(input('Enter Selection: '))
         if sel == 1:
             view_all_budgets()
         elif sel == 2:
@@ -47,5 +47,6 @@ def show_budgets_menu():
             break
         else:
             print("Invalid Option")
+        sel = 0
 
     

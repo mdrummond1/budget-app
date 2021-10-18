@@ -13,7 +13,7 @@ def show_main_menu():
     print('3. Transactions')
     print('4. Exit')
 
-    return input("Enter Selection: ")
+    return int(input("Enter Selection: "))
 
 
 
