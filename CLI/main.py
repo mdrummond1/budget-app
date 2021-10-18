@@ -1,15 +1,12 @@
-import psycopg2 as pg
 import Constants as c
-import Table as t
+from Tables import *
 import Database as db
 import json
 import base64
 from os.path import exists
 from Menu import *
 
-
 env = "/etc/.budgeting/dblogin"
-
 
 def try_read_login_file(s, d):
     if exists(s):
@@ -40,10 +37,6 @@ def try_save_login_file(file, dict):
         print('failed to save login info')
         return False
 
-d = {'Budgets': [1, lambda x1, x2: x1 + x2]}
-
-
-
 
 if try_read_login_file(env, c.Connection):
     print("login file found")
@@ -55,9 +48,22 @@ else:
     
 d = db.Database(*c.Connection.values())
 d.connect()
-submenu = '0'
 
-while submenu != '4':
-    submenu = get_user_selection()
-    menu_function = Menu.get_sub_menu(submenu)
-    menu_function()
+#menus = [Menu(title, opt) for title, opt in MenuOptions.items()]
+# selected_function = None
+# selected_menu = Menu('MAIN MENU', MenuOptions['MAIN MENU'])
+
+sel = 0
+while sel != 4:
+    sel = show_main_menu()
+    if sel == 1:
+        show_budgets_menu()
+    elif sel == 2:
+        show_categories_menu()
+    elif sel == 3:
+        show_transactions_menu()
+    elif sel == 4:
+        break
+    else:
+        print("Invalid option!")
+        
