@@ -1,5 +1,7 @@
+from os import X_OK
 from misc_functions import format_menu
 from Database import *
+import datetime
 
 class Budget:
     def __init__(self, row):
@@ -16,7 +18,7 @@ class Budget:
 def view_all_budgets(db: Database):
     print("viewing all budgets")
     db.connect()
-    rows = db.SelectQuery("SELECT * FROM BUDGETS")
+    rows = db.SelectQuery("SELECT * FROM budgets")
     budgets = []
     for row in rows:
         budgets.append(Budget(row))
@@ -25,13 +27,42 @@ def view_all_budgets(db: Database):
         print(budget)
 
 def view_selected_budget(db: Database):
-    print("viewing selected budget")
+    view_all_budgets(db)
+
+    sel = int(input("Enter selected id: "))
+
+    rows = db.SelectQuery("SELECT * FROM budgets WHERE budget_id = (%s)", sel)
+    if len(rows) > 1:
+        budget = Budget(rows[0])
+        print(budget)
+    else:
+        print("no budget with that id")
+
 
 def add_new_budget(db: Database):
-    print(f"adding new budget")
+    budget = None
+    start_year = int(input("Enter year: "))
+    start_month = int( input("Enter month: "))
+    start_day = int(input("Enter day: "))
+
+    start_date = datetime.date(start_year, start_month, start_day)
+    try:
+        db.ChangeQuery("INSERT INTO budgets(budget_start_date) VALUES((%s))", start_date)
+        print("Budget added successfully!")
+    
+        rows = db.SelectQuery("SELECT * FROM budgets")
+        budget = Budget(rows[-1])
+        print(budget)
+    except Exception as e:
+        print("Failed to add new budget")
+
 
 def modify_budget(db: Database):
-    print(f"changing budget with id")
+    view_all_budgets(db)
+
+    sel = int(input("Enter selected id: "))
+
+    
 
 def show_budgets_menu(db: Database):
     

@@ -30,15 +30,15 @@ class Database:
             self.connected = False
 
 
-    def SelectQuery(self, s):
+    def SelectQuery(self, s, *args):
         self.connect()
-        self.__cur.execute(s)
+        self.__cur.execute(s, args)
         rows = self.__cur.fetchall()
         return rows
     
-    def ChangeQuery(self, s, obj):
+    def ChangeQuery(self, s, *args):
         self.connect()
-        self.__cur.execute(s, obj)
+        self.__cur.execute(s, args)
         self.__connection.commit()
 
     def __conn_string(self):
