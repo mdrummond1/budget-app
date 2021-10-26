@@ -1,5 +1,6 @@
 from misc_functions import format_menu
 from Database import *
+from .Categories import *
 import datetime
 
 class Budget:
@@ -18,12 +19,10 @@ def view_all_budgets(db: Database):
     print("viewing all budgets")
     db.connect()
     rows = db.SelectQuery("SELECT * FROM budgets")
-    budgets = []
-    for row in rows:
-        budgets.append(Budget(row))
+    budgets = [Budget(row) for row in rows]
 
-    for budget in budgets:
-        print(budget)
+    for b in budgets:
+        print(b)
 
 def view_selected_budget(db: Database):
     view_all_budgets(db)
@@ -37,17 +36,21 @@ def view_selected_budget(db: Database):
     else:
         print("no budget with that id")
 
+    return budget
+
 
 
 def add_new_budget(db: Database):
     budget = None
     start_year = int(input("Enter year: "))
-    start_month = int( input("Enter month: "))
+    start_month = int(input("Enter month: "))
     start_day = int(input("Enter day: "))
+    
     try:
         start_date = datetime.date(start_year, start_month, start_day)
     except ValueError:
-        print("incorrect entry for date. Please try again")
+        print("Invalid date entered. Please try again.")
+        
         return
 
     try:
@@ -59,12 +62,15 @@ def add_new_budget(db: Database):
         print(budget)
     except Exception as e:
         print("Failed to add new budget")
+        print(e)
 
-
-def modify_budget(db: Database):
+def view_budget_categories(db: Database):
     budget = view_selected_budget(db)
-    print(budget.__budget_id)
-    
+    res = db.SelectQuery("SELECT * FROM categories c WHERE c.budget_id = (%s)", budget.__budget_id)
+    categories = [Category(row) for row in res]
+
+    for cat in categories:
+        print(cat)
 
 def show_budgets_menu(db: Database):
     
@@ -74,7 +80,7 @@ def show_budgets_menu(db: Database):
         print("1. Show all budgets")
         print("2. Show selected budget")
         print("3. Add new budget")
-        print("4. Modify budget")
+        print("4. Show all categories for budget")
         print("5. return to main menu")
     
         sel = int(input('Enter Selection: '))
@@ -85,7 +91,7 @@ def show_budgets_menu(db: Database):
         elif sel == 3:
             add_new_budget(db)
         elif sel == 4:
-            modify_budget(db)
+            view_budget_categories(db)
         elif sel == 5:
             break
         else:

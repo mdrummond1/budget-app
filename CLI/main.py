@@ -48,22 +48,23 @@ else:
     
 d = db.Database(*c.Connection.values())
 d.connect()
+if d.connected:
 
-#menus = [Menu(title, opt) for title, opt in MenuOptions.items()]
-# selected_function = None
-# selected_menu = Menu('MAIN MENU', MenuOptions['MAIN MENU'])
+    #menus = [Menu(title, opt) for title, opt in MenuOptions.items()]
+    # selected_function = None
+    # selected_menu = Menu('MAIN MENU', MenuOptions['MAIN MENU'])
 
-sel = 0
-while sel != 4:
-    sel = show_main_menu()
-    if sel == 1:
-        show_budgets_menu(d)
-    elif sel == 2:
-        show_categories_menu(d)
-    elif sel == 3:
-        show_transactions_menu(d)
-    elif sel == 4:
-        break
-    else:
-        print("Invalid option!")
+    sel = 0
+    while sel != 4:
+        sel = show_main_menu()
+        if sel == 1:
+            show_budgets_menu(d)
+        elif sel == 2:
+            show_categories_menu(d)
+        elif sel == 3:
+            show_transactions_menu(d)
+        elif sel == 4:
+            break
+        else:
+            print("Invalid option!")
         
