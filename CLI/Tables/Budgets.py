@@ -1,4 +1,3 @@
-from os import X_OK
 from misc_functions import format_menu
 from Database import *
 import datetime
@@ -30,13 +29,14 @@ def view_selected_budget(db: Database):
     view_all_budgets(db)
 
     sel = int(input("Enter selected id: "))
-
     rows = db.SelectQuery("SELECT * FROM budgets WHERE budget_id = (%s)", sel)
-    if len(rows) > 1:
+    if len(rows) >= 1:
         budget = Budget(rows[0])
         print(budget)
+        return budget
     else:
         print("no budget with that id")
+
 
 
 def add_new_budget(db: Database):
@@ -44,8 +44,12 @@ def add_new_budget(db: Database):
     start_year = int(input("Enter year: "))
     start_month = int( input("Enter month: "))
     start_day = int(input("Enter day: "))
+    try:
+        start_date = datetime.date(start_year, start_month, start_day)
+    except ValueError:
+        print("incorrect entry for date. Please try again")
+        return
 
-    start_date = datetime.date(start_year, start_month, start_day)
     try:
         db.ChangeQuery("INSERT INTO budgets(budget_start_date) VALUES((%s))", start_date)
         print("Budget added successfully!")
@@ -58,10 +62,8 @@ def add_new_budget(db: Database):
 
 
 def modify_budget(db: Database):
-    view_all_budgets(db)
-
-    sel = int(input("Enter selected id: "))
-
+    budget = view_selected_budget(db)
+    print(budget.__budget_id)
     
 
 def show_budgets_menu(db: Database):
