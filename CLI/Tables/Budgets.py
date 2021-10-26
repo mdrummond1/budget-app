@@ -5,15 +5,15 @@ import datetime
 
 class Budget:
     def __init__(self, row):
-        self.__budget_id = row[0]
-        self.__budget_start_date = row[1]
-        self.__budget_end_date = row[2]
-        self.__total_income = row[3]
-        self.__total_liability = row[4]
-        self.__net_amount = row[5]
+        self.budget_id = row[0]
+        self.budget_start_date = row[1]
+        self.budget_end_date = row[2]
+        self.total_income = row[3]
+        self.total_liability = row[4]
+        self.net_amount = row[5]
 
     def __str__(self) -> str:
-        return f"id: {self.__budget_id} start date: {self.__budget_start_date} end date: {self.__budget_end_date} income: {self.__total_income} liability: {self.__total_liability} net: {self.__net_amount}"
+        return f"id: {self.budget_id} start date: {self.budget_start_date} end date: {self.budget_end_date} income: {self.total_income} liability: {self.total_liability} net: {self.net_amount}"
 
 def view_all_budgets(db: Database):
     print("viewing all budgets")
@@ -24,7 +24,7 @@ def view_all_budgets(db: Database):
     for b in budgets:
         print(b)
 
-def view_selected_budget(db: Database):
+def view_selected_budget(db: Database) -> Budget:
     view_all_budgets(db)
 
     sel = int(input("Enter selected id: "))
@@ -35,8 +35,6 @@ def view_selected_budget(db: Database):
         return budget
     else:
         print("no budget with that id")
-
-    return budget
 
 
 
@@ -66,7 +64,9 @@ def add_new_budget(db: Database):
 
 def view_budget_categories(db: Database):
     budget = view_selected_budget(db)
-    res = db.SelectQuery("SELECT * FROM categories c WHERE c.budget_id = (%s)", budget.__budget_id)
+    print("SELECTED:")
+
+    res = db.SelectQuery("SELECT * FROM categories c WHERE c.budget_id = (%s)", budget.budget_id)
     categories = [Category(row) for row in res]
 
     for cat in categories:

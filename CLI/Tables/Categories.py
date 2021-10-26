@@ -1,12 +1,15 @@
 from misc_functions import format_menu
 from Database import *
 
+
 class Category:
     def __init__(self, row) -> None:
-        self.__category = row[0]
-        self.__category_type_id = row[1]
-        self.__category_name = row[2]
-
+        self.category_id = row[0]
+        self.category_type = row[1]
+        self.category_name = row[2]
+        self.budgeted_amount = row[3]
+        self.actual_total = row[4]
+        self.amount_difference = row[5]
 
 
 def show_categories_menu(db: Database):
@@ -15,7 +18,7 @@ def show_categories_menu(db: Database):
     while sel != 6:
         print(format_menu("CATEGORIES"))
         print('1. View All Categories')
-        print('2. View Selected Categorie')
+        print('2. View Selected Categories')
         print('3. Add New Category')
         print('4. Modify Category')
         print('5. Delete Category')
@@ -41,13 +44,42 @@ def show_categories_menu(db: Database):
         sel = 0 
 
 def view_all_categories(db: Database):
-    print("showing all categories")
+    categories  = [Category(row) for row in  db.SelectQuery("SELECT * FROM categories")]
+    for cat in categories:
+        print(cat)
 
-def view_selected_category(db: Database):
-    print(f"showing category with id: ")
+def view_selected_category(db: Database) -> Category:
+    view_all_categories(db)
+    sel = int(input("Select ID of category"))
+
+    cat = db.SelectQuery("SELECT * FROM categories c WHERE c.category_id = (%s)", sel)
+
+    if len(cat) >=1:
+        print(cat)
+        return cat
+    else:
+        print("No category found")
+
 
 def add_new_category(db: Database):
-    print(f"adding new category:")
+    budgets = [Budget(row) for row in db.SelectQuery("SELECT * FROM budgets")]
+    for b in budgets:
+        print(b)
+
+    budget_id = int(input("Select budget id for new category"))
+
+
+    types = db.SelectQuery("SELECT category_type FROM category_types")
+    for i, t in enumerate(types):
+        print(f"{i}. {t}")
+
+    cat_type = int(input("select category type: "))
+    #put in some error handling herer
+
+    cat_name = input("Category Name:")
+    budgeted_amount = input("Budgeted amount for category:")
+
+    res = db.ChangeQuery('INSERT INTO categories(category_type, budget_id, category_name, budgeted_amount VALUES((%s), (%s), (%s), (%s))', cat_type, budget_id, cat_name, budgeted_amount)
 
 def modify_category(db: Database):
     print(f"changing category with id")
