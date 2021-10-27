@@ -1,5 +1,7 @@
 import psycopg2
-from Tables import *
+from Tables import Budget
+from Tables import Category
+from Tables import Transaction
 
 class Database:
     def __init__(self, name, host, user, pword):

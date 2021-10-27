@@ -4,7 +4,8 @@ import Database as db
 import json
 import base64
 from os.path import exists
-from Menu import *
+from Menus import *
+
 
 env = "/etc/.budgeting/dblogin"
 
