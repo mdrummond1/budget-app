@@ -1,5 +1,5 @@
 from misc_functions import format_menu
-from Database import *
+from Database import Database
 
 
 class Category:
@@ -44,7 +44,7 @@ def show_categories_menu(db: Database):
         sel = 0 
 
 def view_all_categories(db: Database):
-    categories  = [Category(row) for row in  db.SelectQuery("SELECT * FROM categories")]
+    categories  = [Category(row) for row in  db.__select_query__("SELECT * FROM categories")]
     for cat in categories:
         print(cat)
 
@@ -52,7 +52,7 @@ def view_selected_category(db: Database) -> Category:
     view_all_categories(db)
     sel = int(input("Select ID of category"))
 
-    cat = db.SelectQuery("SELECT * FROM categories c WHERE c.category_id = (%s)", sel)
+    cat = db.__select_query__("SELECT * FROM categories c WHERE c.category_id = (%s)", sel)
 
     if len(cat) >=1:
         print(cat)
@@ -62,14 +62,14 @@ def view_selected_category(db: Database) -> Category:
 
 
 def add_new_category(db: Database):
-    budgets = [Budget(row) for row in db.SelectQuery("SELECT * FROM budgets")]
+    budgets = [Budget(row) for row in db.__select_query__("SELECT * FROM budgets")]
     for b in budgets:
         print(b)
 
     budget_id = int(input("Select budget id for new category"))
 
 
-    types = db.SelectQuery("SELECT category_type FROM category_types")
+    types = db.__select_query__("SELECT category_type FROM category_types")
     for i, t in enumerate(types):
         print(f"{i}. {t}")
 
@@ -79,7 +79,7 @@ def add_new_category(db: Database):
     cat_name = input("Category Name:")
     budgeted_amount = input("Budgeted amount for category:")
 
-    res = db.ChangeQuery('INSERT INTO categories(category_type, budget_id, category_name, budgeted_amount VALUES((%s), (%s), (%s), (%s))', cat_type, budget_id, cat_name, budgeted_amount)
+    res = db.__change_query__('INSERT INTO categories(category_type, budget_id, category_name, budgeted_amount VALUES((%s), (%s), (%s), (%s))', cat_type, budget_id, cat_name, budgeted_amount)
 
 def modify_category(db: Database):
     print(f"changing category with id")

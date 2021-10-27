@@ -1,5 +1,5 @@
+from Database import Database
 from misc_functions import format_menu
-from Database import *
 from .Categories import *
 import datetime
 
@@ -18,7 +18,7 @@ class Budget:
 def view_all_budgets(db: Database):
     print("viewing all budgets")
     db.connect()
-    rows = db.SelectQuery("SELECT * FROM budgets")
+    rows = db.__select_query__("SELECT * FROM budgets")
     budgets = [Budget(row) for row in rows]
 
     for b in budgets:
@@ -28,7 +28,7 @@ def view_selected_budget(db: Database) -> Budget:
     view_all_budgets(db)
 
     sel = int(input("Enter selected id: "))
-    rows = db.SelectQuery("SELECT * FROM budgets WHERE budget_id = (%s)", sel)
+    rows = db.__select_query__("SELECT * FROM budgets WHERE budget_id = (%s)", sel)
     if len(rows) >= 1:
         budget = Budget(rows[0])
         print(budget)
@@ -52,10 +52,10 @@ def add_new_budget(db: Database):
         return
 
     try:
-        db.ChangeQuery("INSERT INTO budgets(budget_start_date) VALUES((%s))", start_date)
+        db.__change_query__("INSERT INTO budgets(budget_start_date) VALUES((%s))", start_date)
         print("Budget added successfully!")
     
-        rows = db.SelectQuery("SELECT * FROM budgets")
+        rows = db.__select_query__("SELECT * FROM budgets")
         budget = Budget(rows[-1])
         print(budget)
     except Exception as e:
@@ -66,7 +66,7 @@ def view_budget_categories(db: Database):
     budget = view_selected_budget(db)
     print("SELECTED:")
 
-    res = db.SelectQuery("SELECT * FROM categories c WHERE c.budget_id = (%s)", budget.budget_id)
+    res = db.__select_query__("SELECT * FROM categories c WHERE c.budget_id = (%s)", budget.budget_id)
     categories = [Category(row) for row in res]
 
     for cat in categories:

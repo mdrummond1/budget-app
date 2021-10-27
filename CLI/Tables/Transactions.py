@@ -1,13 +1,15 @@
 from misc_functions import format_menu
-from Database import *
+from Database import Database
 
 class Transaction:
     def __init__(self, row) -> None:
-        self.__transaction_id = row[0]
-        self.__transaction_type_id = row[1]
-        self.__transaction_amount = row[2]
-        self.__category = row[3]
-        self.__vendor_id = row[4]
+        self.amount = row[0]
+        self.category_id = row[1]
+        self.date_purchased = row[2]
+        self.memo = row[3]
+        self.transaction_id = row[4]
+        self.transaction_type = row[5]
+        self.vendor_id = row[6]
 
 
 def show_transactions_menu(db: Database):
