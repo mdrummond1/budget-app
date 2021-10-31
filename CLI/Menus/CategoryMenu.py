@@ -1,5 +1,5 @@
 from Database import Database
-from Tables import Category
+from Tables import Category, Budget
 from .MainMenu import format_menu
 
 #category functions
@@ -32,7 +32,7 @@ def show_categories_menu(db: Database):
         else:
             print("Invalid Option!")
 
-        sel = 0 
+        sel = 0
 
 def view_all_categories(db: Database):
     categories  = [Category(row) for row in  db.__select_query__("SELECT * FROM categories")]
@@ -54,23 +54,26 @@ def view_selected_category(db: Database) -> Category:
 
 def add_new_category(db: Database):
     budgets = [Budget(row) for row in db.__select_query__("SELECT * FROM budgets")]
-    for b in budgets:
-        print(b)
+    for budg in budgets:
+        print(budg)
 
-    budget_id = int(input("Select budget id for new category"))
+    budget_id = int(input("Select budget id for new category: "))
 
 
     types = db.__select_query__("SELECT category_type FROM category_types")
-    for i, t in enumerate(types):
-        print(f"{i}. {t}")
+    for i, t in enumerate(types, start=1):
+        print(f"{i}. {t[0]}")#returned as tuple with 1-element
 
     cat_type = int(input("select category type: "))
-    #put in some error handling herer
+    #put in some error handling here
 
     cat_name = input("Category Name:")
-    budgeted_amount = input("Budgeted amount for category:")
-
-    res = db.__change_query__('INSERT INTO categories(category_type, budget_id, category_name, budgeted_amount VALUES((%s), (%s), (%s), (%s))', cat_type, budget_id, cat_name, budgeted_amount)
+    budgeted_amount = input("Budgeted amount for category: ")
+    try:
+        db.__change_query__('INSERT INTO categories(category_type, budget_id, category_name, budgeted_amount) VALUES(%s, %s, %s, %s)', cat_type, budget_id, cat_name, budgeted_amount)
+    except Exception as e:
+        print("failed to add new category")
+        print(e)
 
 def modify_category(db: Database):
     print(f"changing category with id")

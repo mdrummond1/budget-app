@@ -1,10 +1,10 @@
-from menu_functions import format_menu
+from MenuFunctions import format_menu
 
 
 class Menu:
     def __init__(self, title, options):
         self.title: str = title
-        self.options: dict[str] = options
+        self.options: dict = options
 
 def show_main_menu():
     print(format_menu("MAIN MENU"))
@@ -38,6 +38,7 @@ def show_main_menu():
 #         'View All': [1, view_all_categories],
 #         'View Selected': [2, view_selected_category],
 #         'New': [3, add_new_category],
+
 #         'Modify': [4, modify_category],
 #         'Delete': [5, delete_category],
 #         'Main Menu': [6, main_menu]
