@@ -48,7 +48,7 @@ class Database:
     
     def __change_query__(self, s, *args) -> None:
         try:
-            self.__execute_query__(s, args)
+            self.__execute_query__(s, *args)
             self.__connection.commit()
         except Exception as e:
             self.__connection.rollback()
@@ -73,4 +73,4 @@ class Database:
         return [Transaction(row) for row in self.__select_query__('SELECT * FROM transactions')]
 
     def AddTransaction(self, trans: Transaction) -> None:
-        self.__change_query__('INSERT INTO transactions(amount, category_id, date_purchased, memo, transaction_type) VALUES(%(amount)s, %(category_id)s, %(date_purchased)s, %(memo)s, %(transaction_type)s)')
+        self.__change_query__('INSERT INTO transactions(amount, budget_id, category_id, date_purchased, memo, transaction_type) VALUES(%(amount)s, %(category_id)s, %(date_purchased)s, %(memo)s, %(transaction_type)s)', trans.__dict__)

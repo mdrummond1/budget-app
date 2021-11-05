@@ -59,8 +59,8 @@ def add_new_category(db: Database):
 
     budget_id = int(input("Select budget id for new category: "))
 
-
     types = db.__select_query__("SELECT category_type FROM category_types")
+    
     for i, t in enumerate(types, start=1):
         print(f"{i}. {t[0]}")#returned as tuple with 1-element
 
@@ -69,8 +69,12 @@ def add_new_category(db: Database):
 
     cat_name = input("Category Name:")
     budgeted_amount = input("Budgeted amount for category: ")
+    row = [0, cat_type, budget_id, cat_name, budgeted_amount, '0', '0']
+    cat = Category(row)
     try:
-        db.__change_query__('INSERT INTO categories(category_type, budget_id, category_name, budgeted_amount) VALUES(%s, %s, %s, %s)', cat_type, budget_id, cat_name, budgeted_amount)
+        # db.__change_query__("""INSERT INTO categories(category_type, budget_id, category_name, budgeted_amount) VALUES(%s, %s, %s, %s)""", cat_type, budget_id, cat_name, budgeted_amount)
+        Database.AddCategory(cat)
+        print("Category successfully added!")
     except Exception as e:
         print("failed to add new category")
         print(e)
