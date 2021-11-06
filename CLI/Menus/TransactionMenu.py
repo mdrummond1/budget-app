@@ -35,7 +35,9 @@ def show_transactions_menu(db: Database):
         sel = 0
 
 def view_all_transactions(db: Database):
-    print(f"viewing all transactions")
+    transactions = db.GetTransactions()
+    for trans in transactions:
+        print(trans)
 
 def view_selected_transaction(db: Database):
     print(f"viewing selected transaction")

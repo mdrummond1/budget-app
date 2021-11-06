@@ -10,3 +10,5 @@ class Transaction:
         self.transaction_type = row[5]
         self.vendor_id = row[6]
 
+    def __str__(self) -> str:
+        return f"id: {self.transaction_id} amount: {self.amount} category id: {self.category_id} date purchased: {self.date_purchased} type: {self.transaction_type} vendor: {self.vendor_id} memo: {self.memo}"

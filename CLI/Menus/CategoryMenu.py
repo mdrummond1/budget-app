@@ -39,7 +39,7 @@ def show_categories_menu(db: Database):
         sel = 0
 
 def view_all_categories(db: Database):
-    categories  = [Category(row) for row in  db.__select_query__("SELECT * FROM categories")]
+    categories  = db.GetCategories()
     for cat in categories:
         print(cat)
 
