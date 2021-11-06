@@ -1,4 +1,4 @@
-from Tables import Budget
+from Tables import Budget, Category, Transaction
 from Database import Database
 from .MainMenu import format_menu
 
@@ -38,7 +38,7 @@ def add_new_budget(db: Database):
         return
 
     try:
-        db.__change_query__("INSERT INTO budgets(budget_start_date) VALUES((%s))", start_date)
+        db.AddBudget(budget)
         print("Budget added successfully!")
     
         rows = db.__select_query__("SELECT * FROM budgets")

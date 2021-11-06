@@ -6,7 +6,6 @@ import base64
 from os.path import exists
 from Menus import *
 
-
 env = "/etc/.budgeting/dblogin"
 
 def try_read_login_file(s, d):
