@@ -4,9 +4,10 @@ import Database as db
 from Menus import *
 from DBInfo import try_read_login_file, collect_login_info, try_save_login_file
 
-env = "/etc/.budgeting/dblogin"
+env = "./CLI/DBInfo/config.json"
 def main():
-    if try_read_login_file(env, c.Connection):
+    file_found, c.Connection = try_read_login_file(env)
+    if file_found:
         print("login file found")
         print(f"logging in as user \'{c.Connection['user']}\'")
     else:
@@ -18,7 +19,7 @@ def main():
     if d.connected:
 
         sel = 0
-        while sel != 4:
+        while sel != 5:
             sel = show_main_menu()
             if sel == 1:
                 show_budgets_menu(d)
@@ -27,6 +28,8 @@ def main():
             elif sel == 3:
                 show_transactions_menu(d)
             elif sel == 4:
+                show_reports_menu(d)
+            elif sel == 5:
                 break
             else:
                 print("Invalid option!")

@@ -10,6 +10,7 @@ def show_main_menu():
     print('1. Budgets')
     print('2. Categories')
     print('3. Transactions')
-    print('4. Exit')
+    print('4. Reports')
+    print('5. Exit')
 
     return int(input("Enter Selection: "))

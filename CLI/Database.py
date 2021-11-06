@@ -38,13 +38,9 @@ class Database:
         self.__cur.execute(s, args)
 
     def __select_query__(self, s, *args) -> list:
-        try:
-            self.__execute_query__(s, args)
-            rows = self.__cur.fetchall()
-            return rows
-
-        except Exception as e:
-            print(e)
+        self.__execute_query__(s, args)
+        rows = self.__cur.fetchall()
+        return rows
     
     def __change_query__(self, s, *args) -> None:
         try:
@@ -52,7 +48,7 @@ class Database:
             self.__connection.commit()
         except Exception as e:
             self.__connection.rollback()
-            print(e)
+            raise
 
     def __conn_string(self) -> str:
         return f"dbname={self.__name} host={self.__host} user={self.__user} password={self.__pword}"
@@ -61,7 +57,9 @@ class Database:
         return [Budget(row) for row in self.__select_query__('SELECT * FROM budgets')]
 
     def GetCategoriesFromBudgetId(self, budget_id: int):
-        return [Category(row) for row in self.__select_query__('SELECT * FROM categories c WHERE c.budget_id = (%s)', budget_id)]
+        rows = self.__select_query__('SELECT * FROM categories c WHERE c.budget_id = (%s)', budget_id)
+        if len(rows) > 0:
+            return Budget(rows[0]) 
 
     #def GetTransactionsFromBudgetId(self, budget_id: int):
     #    return [Transaction(row) for row in self.__select_query__('SELECT * FROM transactions t')]
@@ -74,13 +72,24 @@ class Database:
     
     def GetCategories(self) -> list:
         return [Category(row) for row in self.__select_query__('SELECT * FROM categories')]
+    
+    def GetCategoryFromId(self, cat_id) -> Category:
+        rows = self.__select_query__('SELECT * FROM categories WHERE category_id = %s', cat_id) 
+        if len(rows) > 0:
+            return Category(rows[0])
 
     def AddCategory(self, budget_id, cat_type: int, cat_name: str, budgeted_amount: str) -> None:
         self.__change_query__('INSERT INTO categories(budget_id, category_type, category_name, budgeted_amount) VALUES(%s, %s, %s, %s)', budget_id, cat_type, cat_name, budgeted_amount)
     
-    def UpdateCategory(self, cat: Category):
-        self.__change_query__('UPDATE categories SET category_type = %(category_type)s, category_name = %(category_name)s, budgeted_amount = %(budgeted_amount)s WHERE category_id = %(category_id)s', cat.__dict__)
-    
+    def ModifyCategoryAmount(self, cat_id, new_amount):
+        self.__change_query__('UPDATE categories SET budgeted_amount = %s WHERE category_id = %s', new_amount, cat_id)
+
+    def ModifyCategoryName(self, cat_id, new_name):
+        self.__change_query__('UPDATE categories SET category_name = %s WHERE category_id = %s', new_name, cat_id)
+
+    def DeleteCategory(self, cat_id):
+        self.__change_query__('DELETE FROM categories WHERE category_id = %s', cat_id)
+
     def GetTransactionsFromCategoryId(self, category_id: int):
         return [Transaction(row) for row in self.__select_query__('SELECT * FROM transactions t WHERE t.category_id = (%s)', category_id)]
 
