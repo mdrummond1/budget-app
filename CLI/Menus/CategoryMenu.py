@@ -15,7 +15,7 @@ def show_categories_menu(db: Database):
         print('5. Delete Category')
         print('6. Main Menu')
 
-        sel = int(input("Enter Selection:"))
+        sel = int(input("Enter Selection: "))
             
         if sel == 1:
             view_all_categories(db)
@@ -41,16 +41,14 @@ def view_all_categories(db: Database):
 
 def view_selected_category(db: Database) -> Category:
     view_all_categories(db)
-    sel = int(input("Select ID of category"))
+    sel = int(input("Select ID of category: "))
 
-    cat = db.__select_query__("SELECT * FROM categories c WHERE c.category_id = (%s)", sel)
-
-    if len(cat) >=1:
-        print(cat)
-        return cat
+    rows = db.__select_query__("SELECT * FROM categories c WHERE c.category_id = (%s)", sel)
+    if len(rows) >= 1:
+        category = Category(rows[0])
+        print(category)
     else:
-        print("No category found")
-
+        print("no category with that id")
 
 def add_new_category(db: Database):
     budgets = [Budget(row) for row in db.__select_query__("SELECT * FROM budgets")]
@@ -59,7 +57,7 @@ def add_new_category(db: Database):
 
     budget_id = int(input("Select budget id for new category: "))
 
-    types = db.__select_query__("SELECT category_type FROM category_types")
+    types = db.GetCategoryTypes()
     
     for i, t in enumerate(types, start=1):
         print(f"{i}. {t[0]}")#returned as tuple with 1-element
@@ -69,11 +67,9 @@ def add_new_category(db: Database):
 
     cat_name = input("Category Name:")
     budgeted_amount = input("Budgeted amount for category: ")
-    row = [0, cat_type, budget_id, cat_name, budgeted_amount, '0', '0']
-    cat = Category(row)
+    
     try:
-        # db.__change_query__("""INSERT INTO categories(category_type, budget_id, category_name, budgeted_amount) VALUES(%s, %s, %s, %s)""", cat_type, budget_id, cat_name, budgeted_amount)
-        Database.AddCategory(cat)
+        db.AddCategory(budget_id, cat_type, cat_name, budgeted_amount)
         print("Category successfully added!")
     except Exception as e:
         print("failed to add new category")

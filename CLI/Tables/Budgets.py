@@ -1,4 +1,3 @@
-import datetime
 
 class Budget:
     def __init__(self, row):
@@ -11,5 +10,3 @@ class Budget:
 
     def __str__(self) -> str:
         return f"id: {self.budget_id} start date: {self.budget_start_date} end date: {self.budget_end_date} income: {self.total_income} liability: {self.total_liability} net: {self.net_amount}"
-
-    

@@ -1,7 +1,7 @@
+from datetime import datetime
 import psycopg2
-from Tables import Budget
-from Tables import Category
-from Tables import Transaction
+from Constants import Category_Types
+from Tables import Budget, Category, Transaction
 
 class Database:
     def __init__(self, name, host, user, pword):
@@ -60,14 +60,29 @@ class Database:
     def GetBudgets(self) -> list:
         return [Budget(row) for row in self.__select_query__('SELECT * FROM budgets')]
 
-    def AddBudget(self, budget: Budget) -> None:
-        self.__change_query__('INSERT INTO budgets(budget_start_date) VALUES(%(budget_start_date)s)', budget.__dict)
+    def GetCategoriesFromBudgetId(self, budget_id: int):
+        return [Category(row) for row in self.__select_query__('SELECT * FROM categories c WHERE c.budget_id = (%s)', budget_id)]
 
+    #def GetTransactionsFromBudgetId(self, budget_id: int):
+    #    return [Transaction(row) for row in self.__select_query__('SELECT * FROM transactions t')]
+   
+    def AddBudget(self, start_date: datetime) -> None:
+        self.__change_query__('INSERT INTO budgets(budget_start_date) VALUES(%s)', start_date)
+
+    def GetCategoryTypes(self) -> list:
+        return [t for t in self.__select_query__('SELECT category_type FROM category_types')]
+    
     def GetCategories(self) -> list:
         return [Category(row) for row in self.__select_query__('SELECT * FROM categories')]
 
-    def AddCategory(self, cat: Category) -> None:
-        self.__change_query__('INSERT INTO categories(category_type, category_name, budgeted_amount) VALUES((%(category_type)s, %(category_name)s, %(budgeted_amount)s)', cat.__dict__)
+    def AddCategory(self, budget_id, cat_type: int, cat_name: str, budgeted_amount: str) -> None:
+        self.__change_query__('INSERT INTO categories(budget_id, category_type, category_name, budgeted_amount) VALUES(%s, %s, %s, %s)', budget_id, cat_type, cat_name, budgeted_amount)
+    
+    def UpdateCategory(self, cat: Category):
+        self.__change_query__('UPDATE categories SET category_type = %(category_type)s, category_name = %(category_name)s, budgeted_amount = %(budgeted_amount)s WHERE category_id = %(category_id)s', cat.__dict__)
+    
+    def GetTransactionsFromCategoryId(self, category_id: int):
+        return [Transaction(row) for row in self.__select_query__('SELECT * FROM transactions t WHERE t.category_id = (%s)', category_id)]
 
     def GetTransactions(self) -> list:
         return [Transaction(row) for row in self.__select_query__('SELECT * FROM transactions')]

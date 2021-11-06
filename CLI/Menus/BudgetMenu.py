@@ -1,6 +1,7 @@
 from Tables import Budget, Category, Transaction
 from Database import Database
 from .MainMenu import format_menu
+import datetime
 
 def view_all_budgets(db: Database):
     print("viewing all budgets")
@@ -23,27 +24,22 @@ def view_selected_budget(db: Database) -> Budget:
     else:
         print("no budget with that id")
 
-
 def add_new_budget(db: Database):
-    budget = None
     start_year = int(input("Enter year: "))
     start_month = int(input("Enter month: "))
     start_day = int(input("Enter day: "))
-    
+
+    start_date = None 
     try:
         start_date = datetime.date(start_year, start_month, start_day)
     except ValueError:
         print("Invalid date entered. Please try again.")
-        
         return
 
     try:
-        db.AddBudget(budget)
+        db.AddBudget(start_date)
         print("Budget added successfully!")
-    
-        rows = db.__select_query__("SELECT * FROM budgets")
-        budget = Budget(rows[-1])
-        print(budget)
+        view_all_budgets(db)
     except Exception as e:
         print("Failed to add new budget")
         print(e)
@@ -59,7 +55,6 @@ def view_budget_categories(db: Database):
         print(cat)
 
 def show_budgets_menu(db: Database):
-    
     sel = 0
     while sel != 5:
         print(format_menu("BUDGETS"))
@@ -83,5 +78,3 @@ def show_budgets_menu(db: Database):
         else:
             print("Invalid Option")
         sel = 0
-
-
