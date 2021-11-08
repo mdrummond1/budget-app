@@ -24,7 +24,6 @@ class Database:
             except:
                 print("Connection failed")
 
-    
     def close(self):
         if self.__connection is not None:
             self.__cur.close()
@@ -61,9 +60,6 @@ class Database:
         if len(rows) > 0:
             return Budget(rows[0]) 
 
-    #def GetTransactionsFromBudgetId(self, budget_id: int):
-    #    return [Transaction(row) for row in self.__select_query__('SELECT * FROM transactions t')]
-   
     def AddBudget(self, start_date: datetime) -> None:
         self.__change_query__('INSERT INTO budgets(budget_start_date) VALUES(%s)', start_date)
 
@@ -87,14 +83,19 @@ class Database:
     def ModifyCategoryName(self, cat_id, new_name):
         self.__change_query__('UPDATE categories SET category_name = %s WHERE category_id = %s', new_name, cat_id)
 
-    def DeleteCategory(self, cat_id):
+    def DeleteCategory(self, cat_id) -> None:
         self.__change_query__('DELETE FROM categories WHERE category_id = %s', cat_id)
 
-    def GetTransactionsFromCategoryId(self, category_id: int):
+    def GetTransactionsFromCategoryId(self, category_id: int) -> list:
         return [Transaction(row) for row in self.__select_query__('SELECT * FROM transactions t WHERE t.category_id = (%s)', category_id)]
 
     def GetTransactions(self) -> list:
         return [Transaction(row) for row in self.__select_query__('SELECT * FROM transactions')]
+    
+    def GetTransactionFromId(self, trans_id: int):
+        rows = self.__select_query__('SELECT * FROM transactions WHERE transaction_id = %s', trans_id)
+        if len(rows) > 0:
+            return Transaction(rows[0])
 
     def AddTransaction(self, trans: Transaction) -> None:
         self.__change_query__('INSERT INTO transactions(amount, budget_id, category_id, date_purchased, memo, transaction_type) VALUES(%(amount)s, %(category_id)s, %(date_purchased)s, %(memo)s, %(transaction_type)s)', trans.__dict__)

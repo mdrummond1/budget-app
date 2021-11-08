@@ -11,11 +11,12 @@ def show_categories_menu(db: Database):
         print(format_menu("CATEGORIES"))
         print('1. View All Categories')
         print('2. View Selected Categories')
-        print('3. Add New Category')
-        print('4. Change Category Budgeted Amount')
-        print('5. Change Category Name')
-        print('6. Delete Category')
-        print('7. Main Menu')
+        print('3. View Category Transactions')
+        print('4. Add New Category')
+        print('5. Change Category Budgeted Amount')
+        print('6. Change Category Name')
+        print('7. Delete Category')
+        print('8. Main Menu')
 
         sel = int(input("Enter Selection: "))
             
@@ -24,7 +25,7 @@ def show_categories_menu(db: Database):
         elif sel == 2:
             view_selected_category(db)
         elif sel == 3:
-            add_new_category(db)
+            show_transactions_for_category(db)
         elif sel == 4:
             change_budgeted_amount(db)
         elif sel == 5:
@@ -32,6 +33,8 @@ def show_categories_menu(db: Database):
         elif sel == 6:
             delete_category(db)
         elif sel == 7:
+            add_new_category(db)
+        elif sel == 8:
             break
         else:
             print("Invalid Option!")
@@ -54,6 +57,15 @@ def view_selected_category(db: Database) -> Category:
     else:
         print("no category with that id")
 
+def show_transactions_for_category(db: Database):
+    category = view_selected_category(db)
+    if Category is None:
+        print("Cancelling...")
+
+    transactions = db.GetTransactionsFromCategoryId(category.category_id)
+    for trans in transactions:
+        print(trans)
+    
 def add_new_category(db: Database):
     budgets = [Budget(row) for row in db.__select_query__("SELECT * FROM budgets")]
     for budg in budgets:

@@ -8,7 +8,7 @@ def try_read_login_file(s: str):
             d = json.loads(content)   
             return True, d     
     else:
-        return False
+        return False, None
 
 def collect_login_info():
     conn = {}
@@ -18,9 +18,9 @@ def collect_login_info():
     conn['pword'] = input("Enter password: ")
     return conn
 
-def try_save_login_file(file, dict):
+def try_save_login_file(file, d: dict):
     try:
-        encoded_string = json.dumps(dict).encode('ascii')
+        encoded_string = json.dumps(d).encode('ascii')
         with open(file, "w") as fp:
             fp.write(encoded_string)
         return True

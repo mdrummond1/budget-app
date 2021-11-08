@@ -40,7 +40,14 @@ def view_all_transactions(db: Database):
         print(trans)
 
 def view_selected_transaction(db: Database):
-    print(f"viewing selected transaction")
+    view_all_transactions(db)
+    sel = int(input("Select ID of transaction: "))
+
+    transaction = db.GetTransactionFromId(sel)
+    if transaction is None:
+        print("ID not found. Cancelling...")
+        return
+    print(transaction)
 
 def add_new_transaction(db: Database):
     print(f"adding new transaction")
