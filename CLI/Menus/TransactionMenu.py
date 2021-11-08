@@ -17,6 +17,7 @@ def show_transactions_menu(db: Database):
         print('6. Main Menu')
     
         sel = int(input("Enter Selection: "))
+        
         if sel == 1:
             view_all_transactions(db)
         elif sel == 2:
@@ -50,7 +51,17 @@ def view_selected_transaction(db: Database):
     print(transaction)
 
 def add_new_transaction(db: Database):
-    print(f"adding new transaction")
+#    vendors = db.GetVendors()
+  #  if len(vendors) <= 0:
+  #      print("Need to add a vendor first")
+  #      types = db.GetVendorTypes()
+        
+  #      if len(types) <= 0:
+  #          print("Need to add a vendor category first")
+  #          type_name = input("Enter Vendor Category: ")
+    #           db.AddVendorType(type_name)
+    #        selected_type = db.GetVendorTypeById()
+            
 
 def modify_transaction(db: Database):
     print(f"changing transaction with id:")

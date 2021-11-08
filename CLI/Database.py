@@ -1,7 +1,8 @@
 from datetime import datetime
 import psycopg2
 from Constants import Category_Types
-from Tables import Budget, Category, Transaction
+from Tables import Budget, Category, Transaction, Vendor, VendorType
+
 
 class Database:
     def __init__(self, name, host, user, pword):
@@ -99,3 +100,18 @@ class Database:
 
     def AddTransaction(self, trans: Transaction) -> None:
         self.__change_query__('INSERT INTO transactions(amount, budget_id, category_id, date_purchased, memo, transaction_type) VALUES(%(amount)s, %(category_id)s, %(date_purchased)s, %(memo)s, %(transaction_type)s)', trans.__dict__)
+    
+    def GetVendors(self) -> list:
+        return [Vendor(row) for row in self.__select_query__('SELECT * FROM vendors')]
+
+    def GetVendorFromId(self, vend_id) -> Vendor:
+        rows = self.__select_query__('SELECT * FROM vendors WHERE vendor_id = %s', vend_id)
+        if len(rows) > 0:
+            return Vendor(rows[0])
+
+    def AddVendor(self, vendor: Vendor) -> None:
+        self.__change_query__('INSERT INTO vendors(vendor_type, name, web_address) VALUES(%(vendor_type)s, %(name)s, %(web_address)s)', vendor.__dict__)
+
+    def GetVendorTypes(self) -> list:
+        return [VendorType(row) for row in self.__select_query__('SELECT * FROM vendor_types')]
+
