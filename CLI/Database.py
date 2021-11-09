@@ -3,7 +3,6 @@ import psycopg2
 from Constants import Category_Types
 from Tables import Budget, Category, Transaction, Vendor, VendorType
 
-
 class Database:
     def __init__(self, name, host, user, pword):
         self.__name = name
@@ -111,7 +110,14 @@ class Database:
 
     def AddVendor(self, vendor: Vendor) -> None:
         self.__change_query__('INSERT INTO vendors(vendor_type, name, web_address) VALUES(%(vendor_type)s, %(name)s, %(web_address)s)', vendor.__dict__)
-
+    
     def GetVendorTypes(self) -> list:
         return [VendorType(row) for row in self.__select_query__('SELECT * FROM vendor_types')]
 
+    def GetVendorTypeByTypeName(self, type_name) -> VendorType:
+        rows = self.__select_query__('SELECT * FROM vendor_types WHERE vendor_type_id = %s', type_name)
+        if len(rows) > 0:
+            return VendorType(rows[0])
+
+    def AddVendorType(self, type_name: str):
+        self.__change_query__('INSERT INTO vendor_types(vendor_type) VALUES(%s)', type_name)

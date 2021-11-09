@@ -7,5 +7,5 @@ class Vendor:
         self.name = row[2]
         self.web_address = row[3]
 
-    def def __str__(self) -> str:
+    def __str__(self) -> str:
         return f"id: {self.vendor_id} vendor_type: {self.vendor_type} name: {self.name} web address: {self.web_address}"

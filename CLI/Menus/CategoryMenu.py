@@ -2,6 +2,7 @@ from os import execlp
 from Database import Database
 from Tables import Category, Budget
 from .MainMenu import format_menu
+from MenuFunctions import print_obj_list
 
 #category functions
 def show_categories_menu(db: Database):
@@ -75,9 +76,7 @@ def add_new_category(db: Database):
 
     types = db.GetCategoryTypes()
     
-    for i, t in enumerate(types, start=1):
-        print(f"{i}. {t[0]}")#returned as tuple with 1-element
-
+    print_obj_list(types)
     cat_type = int(input("select category type: "))
     #put in some error handling here
 

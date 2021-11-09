@@ -1,5 +1,4 @@
 import Constants as c
-from Tables import Budget, Category, Transaction
 import Database as db
 from Menus import *
 from DBInfo import try_read_login_file, collect_login_info, try_save_login_file
