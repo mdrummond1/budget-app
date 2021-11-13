@@ -1,7 +1,8 @@
 from Database import Database
 from Tables import Transaction, VendorType, Vendor
 from .MainMenu import format_menu
-from MenuFunctions import print_obj_list
+from MenuFunctions import print_obj_list, select_obj_from_list, get_datetime
+from Menus.CategoryMenu import view_selected_category
 
 def show_transactions_menu(db: Database):
 
@@ -24,8 +25,8 @@ def show_transactions_menu(db: Database):
             view_selected_transaction(db)
         elif sel == 3:
             add_new_transaction(db)
-        elif sel == 4:
-            modify_transaction(db)
+        #elif sel == 4:
+        #    modify_transaction(db)
         elif sel == 5:
             delete_transaction(db)
         elif sel == 6:
@@ -51,40 +52,57 @@ def view_selected_transaction(db: Database):
     print(transaction)
 
 def add_new_vendor(db: Database) -> Vendor:
+#        vendor_name = input("Enter vendor name: ")
+#        vendor_web_address = input("Enter vendor web address (Enter for none): ")
     pass
 
 def add_new_vendor_type(db: Database) -> VendorType:
-    pass
+    type_name = input("enter vendor category: ")
+    db.AddVendorType(type_name)
 
 def add_new_transaction(db: Database):
-    vendors = db.getvendors()
-    selected_type = None
+    #vendor_type -> vendor -> transaction
+    selected_type: VendorType.VendorType = None
+    selected_vendor: Vendor.Vendor = None
 
+    #vendor_type
+    types = db.GetVendorTypes()
+    if len(types) <= 0:
+        print("need to add a vendor category first")
+        add_new_vendor_type(db)
+        selected_type = db.GetVendorTypes()[0]
+    else:
+        selected_type = select_obj_from_list(types, 'vendor category')
+
+    #vendor
+    vendors = db.GetVendors()
     if len(vendors) <= 0:
         print("need to add a vendor first")
-        types = db.GetVendorTypes()
-        
-        if len(types) <= 0:
-            print("need to add a vendor category first")
-            type_name = input("enter vendor category: ")
-            db.AddVendorType(type_name)
-            selected_type = db.GetVendorTypeByTypeName(type_name)
-        else:
-            print_obj_list(types)
-            selected_type = types[input("Enter number of selected type: ")]
-        
-        vendor_name = input("Enter vendor name: ")
-        vendor_web_address = input("Enter vendor web address (Enter for none): ")
-        
-
+        add_new_vendor(db)
+        selected_vendor = db.GetVendors()[0]
     else:
-        print_obj_list(vendors)
-        selected_vendor = vendors[input("Enter number of selected vendor: ")]
-        
+        selected_vendor = select_obj_from_list(vendors, "vendors") 
+    
+    #transaction
+    amt = input("Enter transaction amount: ")
 
+    purchase_date = None 
+    while purchase_date is None:
+        purchase_date = get_datetime() 
 
-def modify_transaction(db: Database):
-    print(f"changing transaction with id:")
+    selected_category = view_selected_category(db)
+
+    memo = input("Enter memo (Press Enter for empty): ")
+    trans_info = [0, selected_type.vendor_type_id, selected_category.category_id, selected_vendor.vendor_id, amt, purchase_date, memo]
+
+    try:
+        db.AddTransaction(Transaction(trans_info))
+    except Exception as e:
+        print("Error adding transaction")
+        print(e)
+
+#def modify_transaction(db: Database):
+#    print(f"changing transaction with id:")
 
 def delete_transaction(db: Database):
     print(f"deleting transaction with id:")
