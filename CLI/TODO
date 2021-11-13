@@ -1,0 +1,5 @@
+- []implement add_new_vendor
+- []implement add_new_vendor_type
+- []create menu option for vendors menu under transactions
+- []vendors menu will handle vendors and vendor_types
+- []move vendor/vendor_type functions to VendorMenu.py (not created)
