@@ -1,3 +1,4 @@
+from MenuFunctions import get_datetime
 from Tables import Budget, Category, Transaction
 from Database import Database
 from .MainMenu import format_menu
@@ -25,16 +26,9 @@ def view_selected_budget(db: Database) -> Budget:
         print("no budget with that id")
 
 def add_new_budget(db: Database):
-    start_year = int(input("Enter year: "))
-    start_month = int(input("Enter month: "))
-    start_day = int(input("Enter day: "))
-
     start_date = None 
-    try:
-        start_date = datetime.date(start_year, start_month, start_day)
-    except ValueError:
-        print("Invalid date entered. Please try again.")
-        return
+    while start_date is None:
+        start_date = get_datetime()
 
     try:
         db.AddBudget(start_date)

@@ -28,13 +28,13 @@ def show_categories_menu(db: Database):
         elif sel == 3:
             show_transactions_for_category(db)
         elif sel == 4:
-            change_budgeted_amount(db)
-        elif sel == 5:
-            change_category_name(db)
-        elif sel == 6:
-            delete_category(db)
-        elif sel == 7:
             add_new_category(db)
+        elif sel == 5:
+            change_budgeted_amount(db)
+        elif sel == 6:
+            change_category_name(db)
+        elif sel == 7:
+            delete_category(db)
         elif sel == 8:
             break
         else:
