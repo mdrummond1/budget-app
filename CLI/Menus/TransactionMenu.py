@@ -1,25 +1,26 @@
 from datetime import datetime
 from Database import Database
-from Tables import Transaction, VendorType, Vendor
+from Tables.Transactions import Transaction
+from Tables.VendorType import VendorType
+from Tables.Vendor import Vendor
 from Tables.Categories import Category
 from .MainMenu import format_menu
-from MenuFunctions import select_obj_from_list, get_datetime
+from MenuFunctions import force_user_number_selection, select_obj_from_list, get_datetime, try_user_number_selection
 from Menus.CategoryMenu import view_selected_category
 
 def show_transactions_menu(db: Database):
 
     sel = 0
 
-    while sel != 6:
+    while sel != 5:
         print(format_menu("TRANSACTIONS"))
         print('1. View All Transactions')
         print('2. View Selected Transaction')
         print('3. Add New Transaction')
-        print('4. Modify Transaction')
-        print('5. Delete Transaction')
-        print('6. Main Menu')
-    
-        sel = int(input("Enter Selection: "))
+        print('4. Delete Transaction')
+        print('5. Main Menu')
+
+        sel = force_user_number_selection()
         
         if sel == 1:
             view_all_transactions(db)
@@ -27,11 +28,9 @@ def show_transactions_menu(db: Database):
             view_selected_transaction(db)
         elif sel == 3:
             add_new_transaction(db)
-        #elif sel == 4:
-        #    modify_transaction(db)
-        elif sel == 5:
+        elif sel == 4:
             delete_transaction(db)
-        elif sel == 6:
+        elif sel == 5:
             break
         else:
             print("Invalid Option")
@@ -45,13 +44,16 @@ def view_all_transactions(db: Database):
 
 def view_selected_transaction(db: Database):
     view_all_transactions(db)
-    sel = int(input("Select ID of transaction: "))
+    selected_transaction = force_user_number_selection("Select ID of transaction: ")
 
-    transaction = db.GetTransactionFromId(sel)
+    transaction = db.GetTransactionFromId(selected_transaction)
     if transaction is None:
         print("ID not found. Cancelling...")
         return
+
     print(transaction)
+
+    return selected_transaction
 
 def add_new_vendor_type(db: Database) -> VendorType:
     type_name = input("enter vendor category: ")
@@ -61,20 +63,19 @@ def add_new_vendor_type(db: Database) -> VendorType:
     except Exception as e:
         print("add vendor category failed")
         print(e)
-
     
 def add_new_vendor(db: Database) -> Vendor:
     vendor_name: str = input("Enter vendor name: ")
     vendor_web_address:str = input("Enter vendor web address (Enter for none): ")
-    selected_type: VendorType.VendorType = None
+    selected_type: VendorType = None
 
-    types: list['VendorType.VendorType'] = db.GetVendorTypes()
+    types: list['VendorType'] = db.GetVendorTypes()
 
     if len(types) <= 0:
         print("no vendor types found. Need to add one.")
         add_new_vendor_type(db)
     else:
-        selected_type = select_obj_from_list(types)
+        selected_type = select_obj_from_list(types, 'vendor types')
 
     if selected_type is None:
         print("no vendor category selected.")
@@ -103,7 +104,7 @@ def add_new_transaction(db: Database):
         add_new_vendor_type(db)
         selected_type = db.GetVendorTypes()[0]
     else:
-        selected_type: VendorType.VendorType = None
+        selected_type: VendorType = None
         while selected_type is None or selected_type == -1:
             selected_type = select_obj_from_list(types, 'vendor category')
             print("invalid entry")
@@ -115,7 +116,7 @@ def add_new_transaction(db: Database):
         add_new_vendor(db)
         selected_vendor = db.GetVendors()[0]
     else:
-        selected_vendor: Vendor.Vendor = None
+        selected_vendor: Vendor = None
         while selected_vendor is None or selected_vendor == -1:
             selected_vendor = select_obj_from_list(vendors, "vendors") 
     
@@ -136,9 +137,6 @@ def add_new_transaction(db: Database):
     except Exception as e:
         print("Error adding transaction")
         print(e)
-
-#def modify_transaction(db: Database):
-#    print(f"changing transaction with id:")
 
 def delete_transaction(db: Database):
     print(f"deleting transaction with id:")
