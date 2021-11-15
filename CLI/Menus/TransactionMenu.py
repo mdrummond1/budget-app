@@ -1,7 +1,9 @@
+from datetime import datetime
 from Database import Database
 from Tables import Transaction, VendorType, Vendor
+from Tables.Categories import Category
 from .MainMenu import format_menu
-from MenuFunctions import print_obj_list, select_obj_from_list, get_datetime
+from MenuFunctions import select_obj_from_list, get_datetime
 from Menus.CategoryMenu import view_selected_category
 
 def show_transactions_menu(db: Database):
@@ -51,19 +53,48 @@ def view_selected_transaction(db: Database):
         return
     print(transaction)
 
-def add_new_vendor(db: Database) -> Vendor:
-#        vendor_name = input("Enter vendor name: ")
-#        vendor_web_address = input("Enter vendor web address (Enter for none): ")
-    pass
-
 def add_new_vendor_type(db: Database) -> VendorType:
     type_name = input("enter vendor category: ")
-    db.AddVendorType(type_name)
+    try:
+        db.AddVendorType(type_name)
+        print("vendor category added successfully!")
+    except Exception as e:
+        print("add vendor category failed")
+        print(e)
+
+    
+def add_new_vendor(db: Database) -> Vendor:
+    vendor_name: str = input("Enter vendor name: ")
+    vendor_web_address:str = input("Enter vendor web address (Enter for none): ")
+    selected_type: VendorType.VendorType = None
+
+    types: list['VendorType.VendorType'] = db.GetVendorTypes()
+
+    if len(types) <= 0:
+        print("no vendor types found. Need to add one.")
+        add_new_vendor_type(db)
+    else:
+        selected_type = select_obj_from_list(types)
+
+    if selected_type is None:
+        print("no vendor category selected.")
+        print("Cancelling...")
+        return
+
+    vendor_info = [0, selected_type.vendor_type_id, vendor_name, vendor_web_address]
+    vendor = Vendor(vendor_info)
+
+    try:
+        db.AddVendor(vendor)
+        print("vendor added successfully")
+    except Exception as e:
+        print("add vendor failed.")
+        print(e)
 
 def add_new_transaction(db: Database):
     #vendor_type -> vendor -> transaction
-    selected_type: VendorType.VendorType = None
-    selected_vendor: Vendor.Vendor = None
+    selected_type: int = None
+    selected_vendor: int = None
 
     #vendor_type
     types = db.GetVendorTypes()
@@ -72,7 +103,10 @@ def add_new_transaction(db: Database):
         add_new_vendor_type(db)
         selected_type = db.GetVendorTypes()[0]
     else:
-        selected_type = select_obj_from_list(types, 'vendor category')
+        selected_type: VendorType.VendorType = None
+        while selected_type is None or selected_type == -1:
+            selected_type = select_obj_from_list(types, 'vendor category')
+            print("invalid entry")
 
     #vendor
     vendors = db.GetVendors()
@@ -81,16 +115,18 @@ def add_new_transaction(db: Database):
         add_new_vendor(db)
         selected_vendor = db.GetVendors()[0]
     else:
-        selected_vendor = select_obj_from_list(vendors, "vendors") 
+        selected_vendor: Vendor.Vendor = None
+        while selected_vendor is None or selected_vendor == -1:
+            selected_vendor = select_obj_from_list(vendors, "vendors") 
     
     #transaction
-    amt = input("Enter transaction amount: ")
+    amt: str = input("Enter transaction amount: ")
 
-    purchase_date = None 
+    purchase_date: datetime = None 
     while purchase_date is None:
         purchase_date = get_datetime() 
 
-    selected_category = view_selected_category(db)
+    selected_category: Category = view_selected_category(db)
 
     memo = input("Enter memo (Press Enter for empty): ")
     trans_info = [0, selected_type.vendor_type_id, selected_category.category_id, selected_vendor.vendor_id, amt, purchase_date, memo]
