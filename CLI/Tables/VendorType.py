@@ -4,4 +4,4 @@ class VendorType:
         self.vendor_type = row[1]
 
     def __str__(self):
-        return f"id: {self.vendor_type_id} vendor category:{self.vendor_type}"
+        return f"id: {self.vendor_type_id} vendor category: {self.vendor_type}"
