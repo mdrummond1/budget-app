@@ -6,19 +6,21 @@ from Tables.Vendor import Vendor
 from Tables.Categories import Category
 from .MainMenu import format_menu
 from MenuFunctions import force_user_number_selection, select_obj_from_list, get_datetime, try_user_number_selection
-from Menus.CategoryMenu import view_selected_category
+from .CategoryMenu import view_selected_category
+from .VendorMenu import show_vendor_menu
 
 def show_transactions_menu(db: Database):
 
     sel = 0
 
-    while sel != 5:
+    while sel != 6:
         print(format_menu("TRANSACTIONS"))
         print('1. View All Transactions')
         print('2. View Selected Transaction')
         print('3. Add New Transaction')
         print('4. Delete Transaction')
-        print('5. Main Menu')
+        print('5. Vendor Menu')
+        print('6. Main Menu')
 
         sel = force_user_number_selection()
         
@@ -31,6 +33,8 @@ def show_transactions_menu(db: Database):
         elif sel == 4:
             delete_transaction(db)
         elif sel == 5:
+            show_vendor_menu(db)
+        elif sel == 6:
             break
         else:
             print("Invalid Option")
@@ -64,33 +68,6 @@ def add_new_vendor_type(db: Database) -> VendorType:
         print("add vendor category failed")
         print(e)
     
-def add_new_vendor(db: Database) -> Vendor:
-    vendor_name: str = input("Enter vendor name: ")
-    vendor_web_address:str = input("Enter vendor web address (Enter for none): ")
-    selected_type: VendorType = None
-
-    types: list['VendorType'] = db.GetVendorTypes()
-
-    if len(types) <= 0:
-        print("no vendor types found. Need to add one.")
-        add_new_vendor_type(db)
-    else:
-        selected_type = select_obj_from_list(types, 'vendor types')
-
-    if selected_type is None:
-        print("no vendor category selected.")
-        print("Cancelling...")
-        return
-
-    vendor_info = [0, selected_type.vendor_type_id, vendor_name, vendor_web_address]
-    vendor = Vendor(vendor_info)
-
-    try:
-        db.AddVendor(vendor)
-        print("vendor added successfully")
-    except Exception as e:
-        print("add vendor failed.")
-        print(e)
 
 def add_new_transaction(db: Database):
     #vendor_type -> vendor -> transaction

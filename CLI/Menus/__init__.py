@@ -4,3 +4,5 @@ from .CategoryMenu import *
 from .TransactionMenu import *
 from .MainMenu import *
 from .ReportMenu import *
+from .VendorMenu import *
+from .VendorCategoryMenu import *
