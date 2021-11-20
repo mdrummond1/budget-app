@@ -1,7 +1,8 @@
 from Database import Database
 from MenuFunctions import format_menu, force_user_number_selection
 from .VendorCategoryMenu import show_vendor_category_menu
-
+from Tables.VendorType import VendorType
+from Tables.Vendor import Vendor
 
 def show_vendor_menu(db: Database):
     sel = 0
@@ -23,8 +24,8 @@ def show_vendor_menu(db: Database):
             view_selected_vendor(db)
         elif sel == 3:
             add_new_vendor(db)
-        elif sel == 4:
-            remove_vendor(db)
+#        elif sel == 4:
+#            remove_vendor(db)
         elif sel == 5:
             show_vendor_category_menu(db)
         elif sel == 6:
@@ -68,4 +69,4 @@ def add_new_vendor(db: Database) -> Vendor:
         print("add vendor failed.")
         print(e)
 
-def remove_vendor(db: Database):
+#def remove_vendor(db: Database):
