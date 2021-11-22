@@ -48,16 +48,16 @@ def view_all_transactions(db: Database):
 
 def view_selected_transaction(db: Database):
     view_all_transactions(db)
-    selected_transaction = force_user_number_selection("Select ID of transaction: ")
+    selected_transaction_id = force_user_number_selection("Select ID of transaction: ")
 
-    transaction = db.GetTransactionFromId(selected_transaction)
+    transaction = db.GetTransactionFromId(selected_transaction_id)
     if transaction is None:
         print("ID not found. Cancelling...")
         return
 
     print(transaction)
 
-    return selected_transaction
+    return transaction
 
 def add_new_vendor_type(db: Database) -> VendorType:
     type_name = input("enter vendor category: ")

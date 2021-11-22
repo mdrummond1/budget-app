@@ -2,12 +2,13 @@ import Constants as c
 import Database as db
 from Menus import *
 from DBInfo import try_read_login_file, collect_login_info, try_save_login_file
+from MenuFunctions import force_user_number_selection
 from os import name
 
 if name == 'nt':
     env = "D:/Programming/projects/budget-app/CLI/DBInfo/config.json"
 else:
-    env = "/mnt/d/Programming/projects/budget-app/CLI/DBInfo/config.json"
+    env = "./DBInfo/config.json"
 
 def main():
     file_found, c.Connection = try_read_login_file(env)

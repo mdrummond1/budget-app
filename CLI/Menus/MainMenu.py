@@ -1,4 +1,4 @@
-from MenuFunctions import format_menu
+from MenuFunctions import format_menu, force_user_number_selection
 
 class Menu:
     def __init__(self, title, options):
@@ -13,4 +13,4 @@ def show_main_menu():
     print('4. Reports')
     print('5. Exit')
 
-    return int(input("Enter Selection: "))
+    return force_user_number_selection()

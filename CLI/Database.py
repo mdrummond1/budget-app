@@ -25,8 +25,9 @@ class Database:
                 self.__cur = self.__connection.cursor()
                 print("Successfully connected")
                 self.connected = True
-            except:
+            except Exception as e:
                 print("Connection failed")
+                print(e)
 
     def close(self):
         if self.__connection is not None:

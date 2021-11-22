@@ -1,6 +1,6 @@
 from Database import Database
-from MenuFunctions import format_menu, force_user_number_selection
-from .VendorCategoryMenu import show_vendor_category_menu
+from MenuFunctions import format_menu, force_user_number_selection, select_obj_from_list
+from .VendorCategoryMenu import show_vendor_category_menu, add_new_vendor_category
 from Tables.VendorType import VendorType
 from Tables.Vendor import Vendor
 
@@ -12,9 +12,8 @@ def show_vendor_menu(db: Database):
         print('1. View All Vendors')
         print('2. View Selected Vendor')
         print('3. Add New Vendor')
-        print('4. Remove Vendor')
-        print('5. Vendor Category Menu')
-        print('6. Main Menu')
+        print('4. Vendor Category Menu')
+        print('5. Main Menu')
 
         sel = force_user_number_selection()
 
@@ -24,33 +23,39 @@ def show_vendor_menu(db: Database):
             view_selected_vendor(db)
         elif sel == 3:
             add_new_vendor(db)
-#        elif sel == 4:
-#            remove_vendor(db)
-        elif sel == 5:
+        elif sel == 4:
             show_vendor_category_menu(db)
-        elif sel == 6:
+        elif sel == 5:
             break
 
 
 def view_all_vendors(db: Database):
-    print("showing vendor types")
+    vendors = db.GetVendors()
+    for vendor in vendors:
+        print(vendor)
 
 def view_selected_vendor(db: Database):
-    print("showing selected vendor")
+    view_all_vendors()
 
-def view_all_vendor_types(db: Database):
-    print("showing all vendor types")
+    selected_vendor_id = force_user_number_selection("Select Vendor: ")
+    vendor = db.GetVendorFromId(selected_vendor_id)
+    if vendor is None:
+        print("No vendor found")
+        return
+
+    print(vendor)
+    return vendor
 
 def add_new_vendor(db: Database) -> Vendor:
     vendor_name: str = input("Enter vendor name: ")
     vendor_web_address:str = input("Enter vendor web address (Enter for none): ")
     selected_type: VendorType = None
 
-    types: list['VendorType'] = db.GetVendorTypes()
+    types: list = db.GetVendorTypes()
 
     if len(types) <= 0:
         print("no vendor types found. Need to add one.")
-        add_new_vendor_type(db)
+        add_new_vendor_category(db)
     else:
         selected_type = select_obj_from_list(types, 'vendor types')
 
@@ -68,5 +73,3 @@ def add_new_vendor(db: Database) -> Vendor:
     except Exception as e:
         print("add vendor failed.")
         print(e)
-
-#def remove_vendor(db: Database):
