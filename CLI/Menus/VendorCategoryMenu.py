@@ -12,4 +12,7 @@ def view_selected_vendor_category(db: Database):
 def add_new_vendor_category(db: Database):
     print("adding new vendor")
 
+def delete_vendor_type(db: Database):
+    print("deleting vendor category")
+
 #TODO: add update functions

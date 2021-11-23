@@ -13,7 +13,10 @@ def show_vendor_menu(db: Database):
         print('2. View Selected Vendor')
         print('3. Add New Vendor')
         print('4. Vendor Category Menu')
-        print('5. Main Menu')
+        print('5. Change Vendor Name')
+        print('6. Change Vendor Category')
+        print('7. Change Vendor Web Address')
+        print('8. Main Menu')
 
         sel = force_user_number_selection()
 
@@ -26,6 +29,12 @@ def show_vendor_menu(db: Database):
         elif sel == 4:
             show_vendor_category_menu(db)
         elif sel == 5:
+            update_vendor_name(db)
+        elif sel == 6:
+            update_vendor_type(db)
+        elif sel == 7:
+            update_vendor_web_address(db)
+        elif sel == 8:
             break
 
 
@@ -48,7 +57,7 @@ def view_selected_vendor(db: Database):
 
 def add_new_vendor(db: Database) -> Vendor:
     vendor_name: str = input("Enter vendor name: ")
-    vendor_web_address:str = input("Enter vendor web address (Enter for none): ")
+    vendor_web_address: str = input("Enter vendor web address (Enter for none): ")
     selected_type: VendorType = None
 
     types: list = db.GetVendorTypes()
@@ -73,3 +82,12 @@ def add_new_vendor(db: Database) -> Vendor:
     except Exception as e:
         print("add vendor failed.")
         print(e)
+
+def update_vendor_name(db: Database):
+    pass
+
+def update_vendor_type(db: Database):
+    pass
+
+def update_vendor_web_address(db: Database):
+    pass
