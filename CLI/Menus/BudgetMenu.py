@@ -1,4 +1,4 @@
-from MenuFunctions import get_datetime
+from MenuFunctions import force_user_number_selection, get_datetime
 from Tables import Budget, Category, Transaction
 from Database import Database
 from .MainMenu import format_menu
@@ -58,7 +58,8 @@ def show_budgets_menu(db: Database):
         print("4. Show all categories for budget")
         print("5. return to main menu")
     
-        sel = int(input('Enter Selection: '))
+        sel = force_user_number_selection()
+
         if sel == 1:
             view_all_budgets(db)
         elif sel == 2:

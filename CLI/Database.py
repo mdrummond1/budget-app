@@ -115,6 +115,12 @@ class Database:
 
     def AddVendor(self, vendor: Vendor) -> None:
         self.__change_query__('INSERT INTO vendors(vendor_type, name, web_address) VALUES(%(vendor_type)s, %(name)s, %(web_address)s)', vendor.vendor_type, vendor.name, vendor.web_address)
+
+    def UpdateVendorName(self, id: int, new_name: str) -> None:
+        self.__change_query__('UPDATE vendors SET name = %s WHERE vendor_id = ', new_name, id)
+
+    def UpdateVendorType(self, vendor_id: int, vendor_cat_id: int) -> None:
+        self.__change_query__('UPDATE vendors SET vendor_type = %s WHERE vendor_id = %s', vendor_cat_id, vendor_id)
     
     def GetVendorTypes(self) -> list:
         return [VendorType(row) for row in self.__select_query__('SELECT * FROM vendor_types')]
@@ -126,3 +132,6 @@ class Database:
 
     def AddVendorType(self, type_name: str):
         self.__change_query__('INSERT INTO vendor_types(vendor_type) VALUES(%s)', type_name)
+
+    def DeleteVendorCategory(self, id: int):
+        self.__change_query__('DELETE FROM vendor_types WHERE vendor_type_id = %s', id)

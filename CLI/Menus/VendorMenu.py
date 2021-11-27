@@ -1,6 +1,6 @@
 from Database import Database
 from MenuFunctions import format_menu, force_user_number_selection, select_obj_from_list
-from .VendorCategoryMenu import show_vendor_category_menu, add_new_vendor_category
+from .VendorCategoryMenu import show_vendor_category_menu, add_new_vendor_category, view_selected_vendor_category
 from Tables.VendorType import VendorType
 from Tables.Vendor import Vendor
 
@@ -44,7 +44,7 @@ def view_all_vendors(db: Database):
         print(vendor)
 
 def view_selected_vendor(db: Database):
-    view_all_vendors()
+    view_all_vendors(db)
 
     selected_vendor_id = force_user_number_selection("Select Vendor: ")
     vendor = db.GetVendorFromId(selected_vendor_id)
@@ -58,18 +58,10 @@ def view_selected_vendor(db: Database):
 def add_new_vendor(db: Database) -> Vendor:
     vendor_name: str = input("Enter vendor name: ")
     vendor_web_address: str = input("Enter vendor web address (Enter for none): ")
-    selected_type: VendorType = None
-
-    types: list = db.GetVendorTypes()
-
-    if len(types) <= 0:
-        print("no vendor types found. Need to add one.")
-        add_new_vendor_category(db)
-    else:
-        selected_type = select_obj_from_list(types, 'vendor types')
+    selected_type: VendorType = view_selected_vendor_category(db)
 
     if selected_type is None:
-        print("no vendor category selected.")
+        print("no vendor category selected or none available.")
         print("Cancelling...")
         return
 
@@ -84,10 +76,42 @@ def add_new_vendor(db: Database) -> Vendor:
         print(e)
 
 def update_vendor_name(db: Database):
-    pass
+    vendor = view_selected_vendor(db)
+    new_name = input("Enter new vendor name: ")
+
+    try:
+        db.update_vendor_name(new_name)
+    except Exception as e:
+        print("failed to update vendor name!")
+        print(e)
 
 def update_vendor_type(db: Database):
-    pass
+    selected_vendor: Vendor = view_selected_vendor(db)
+    selected_category: VendorType = view_selected_vendor_category(db)
+    if selected_category is None:
+        print("no vendor category selected or none available.")
+        print("Cancelling...")
+        return
+
+    try:
+        db.UpdateVendorType(selected_vendor.vendor_id, selected_category.id) 
+        print("vendor update successful!")
+    except Exception as e:
+        print("updating vendor type failed")
+        print(e)
 
 def update_vendor_web_address(db: Database):
-    pass
+    selected_vendor: Vendor = view_selected_vendor(db)
+    if selected_vendor is None:
+        print("no vendor selected or nont available.")
+        print("Cancelling...")
+        return
+    
+    new_web_address: str = input("Enter new web address: ")
+
+    try:
+        db.UpdateVendorWebAddress(selected_vendor.vendor_id, new_web_address)
+        print("vendor update successful!")
+    except Exception as e:
+        print("updating vendor web address failed")
+        print(e)
